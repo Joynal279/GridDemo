@@ -8,14 +8,77 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    private var colors: [Color] = [.blue, .yellow, .green]
+    private var gridItems = [GridItem(.fixed(100))]
+    private var gridVItems = [GridItem(.adaptive(minimum: 100, maximum: .infinity))]
+
+    
+    var body: some View {
+        ScrollView(.vertical) {
+            HStack {
+                Text("Horizontal Task").multilineTextAlignment(.leading).padding(); Spacer()
+            }
+                
+            ScrollView(.horizontal) {
+                LazyHGrid(rows: gridItems, spacing: 25) {
+                    ForEach(0...80, id: \.self) { index in
+                        CellContent(index: index, color: colors[index % colors.count])
+                    }
+                }
+                .padding(5)
+            }
+            .background(Color.cyan)
+            .scrollIndicators(.hidden)
+            .navigationTitle("Task")
+            
+            HStack {
+                Text("Vertical Task").multilineTextAlignment(.leading).padding(); Spacer()
+            }
+                
+            ScrollView(.vertical) {
+                LazyVGrid(columns: gridVItems, spacing: 5) {
+                    ForEach(0...20, id: \.self) { index in
+                        CellVContent(index: index, color: colors[index % colors.count])
+                    }
+                }
+                .padding(5)
+            }
+            .background(Color.cyan)
+            .scrollIndicators(.hidden)
+            .navigationTitle("Task")
+        }
+        .background(Color.red)
+        
+    }
+}
+
+struct CellContent: View {
+    var index: Int
+    var color: Color
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("\(index)")
+                .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100)
+                .background(color)
+                .cornerRadius(8)
+                .font(.system(.largeTitle))
+            Text("Hello")
         }
-        .padding()
+    }
+}
+
+struct CellVContent: View {
+    var index: Int
+    var color: Color
+    
+    var body: some View {
+            Text("\(index)")
+                .frame(minWidth: 50, maxWidth: .infinity, minHeight: 100)
+                .background(color)
+                .cornerRadius(8)
+                .font(.system(.largeTitle))
     }
 }
 
